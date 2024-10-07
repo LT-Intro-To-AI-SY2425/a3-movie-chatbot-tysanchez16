@@ -170,7 +170,13 @@ def title_by_director(matches: List[str]) -> List[str]:
     Returns:
         a list of movies titles directed by the passed in director
     """
-    pass
+    director = matches[0]
+    result = []
+    for movie in movie_db:
+        newD = get_director(movie)
+        if newD == director:
+            result.append(get_title(movie))
+    return result
 
 
 def actors_by_title(matches: List[str]) -> List[str]:
@@ -182,7 +188,14 @@ def actors_by_title(matches: List[str]) -> List[str]:
     Returns:
         a list of actors who acted in the passed in title
     """
-    pass
+    title = matches[0]
+    result = []
+    for movie in movie_db:
+         newA = get_title(movie)
+         if newA == title:
+             result = get_actors(movie)
+    #print(result)
+    return result
 
 
 def year_by_title(matches: List[str]) -> List[int]:
@@ -194,7 +207,13 @@ def year_by_title(matches: List[str]) -> List[int]:
     Returns:
         a list of one item (an int), the year that the movie was made
     """
-    pass
+    title = matches[0]
+    result = []
+    for movie in movie_db:
+        curr = get_title(movie)
+        if curr == title:
+            result.append(get_year(movie))
+    return result
 
 
 def title_by_actor(matches: List[str]) -> List[str]:
@@ -206,7 +225,13 @@ def title_by_actor(matches: List[str]) -> List[str]:
     Returns:
         a list of movie titles that the actor acted in
     """
-    pass
+    actor = matches[0]
+    result = []
+    for movie in movie_db:
+        curr = get_actors(movie)
+        if actor in curr:
+            result.append(get_title(movie))
+    return result
 
 
 # dummy argument is ignored and doesn't matter
@@ -245,7 +270,15 @@ def search_pa_list(src: List[str]) -> List[str]:
         a list of answers. Will be ["I don't understand"] if it finds no matches and
         ["No answers"] if it finds a match but no answers
     """
-    pass
+    title = src[0]
+    result = []
+    if match(pa_list, src) == None:
+        result.append("I don't understand")
+    elif match(pa_list,src) == []:
+        result.append("No answers")
+    elif match(pa_list, src) == title:
+        result.append()
+    return result
 
 
 def query_loop() -> None:
