@@ -270,15 +270,26 @@ def search_pa_list(src: List[str]) -> List[str]:
         a list of answers. Will be ["I don't understand"] if it finds no matches and
         ["No answers"] if it finds a match but no answers
     """
-    title = src[0]
-    result = []
-    if match(pa_list, src) == None:
-        result.append("I don't understand")
-    elif match(pa_list,src) == []:
-        result.append("No answers")
-    elif match(pa_list, src) == title:
-        result.append()
-    return result
+    # title = src[0]
+    # result = []
+    # if match(pa_list, src) == None:
+    #      result.append("I don't understand")
+    # elif match(pa_list,src) == []:
+    #      result.append("No answers")
+    # if match(pa_list, src) == title:
+    #     result.append(director_by_title(title))
+
+    for pattern, action in pa_list:
+        print(pattern, src, action)
+        mat = match(pattern, src)
+        print(mat)
+        if mat != None:
+            #print("found")
+            result = action(mat)
+            return result
+        if mat not in src:
+            return ["No answers"]
+    return ["I don't understand"]
 
 
 def query_loop() -> None:
@@ -359,8 +370,8 @@ if __name__ == "__main__":
     ), "failed title_by_actor test"
     
     assert sorted(search_pa_list(["hi", "there"])) == sorted(
-        ["I don't understand"]
-    ), "failed search_pa_list test 1"
+         ["I don't understand"]
+     ), "failed search_pa_list test 1"
 
     assert sorted(search_pa_list(["who", "directed", "jaws"])) == sorted(
         ["steven spielberg"]
