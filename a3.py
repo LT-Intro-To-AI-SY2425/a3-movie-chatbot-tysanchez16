@@ -233,6 +233,15 @@ def title_by_actor(matches: List[str]) -> List[str]:
             result.append(get_title(movie))
     return result
 
+def movie_with_number_of_actors(matches: List[str]) -> List[str]:
+    num = matches[0]
+    result = []
+    for movie in movie_db:
+        act = len(get_actors(movie))
+        if act == num:
+            result.append(get_title(movie))
+        return result
+
 
 # dummy argument is ignored and doesn't matter
 def bye_action(dummy: List[str]) -> None:
@@ -246,6 +255,8 @@ pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
     (str.split("what movies were made between _ and _"), title_by_year_range),
     (str.split("what movies were made before _"), title_before_year),
     (str.split("what movies were made after _"), title_after_year),
+    # new pattern
+    (str.split("what movie has _ actors in it"), movie_with_number_of_actors),
     # note there are two valid patterns here two different ways to ask for the director
     # of a movie
     (str.split("who directed %"), director_by_title),
@@ -270,14 +281,6 @@ def search_pa_list(src: List[str]) -> List[str]:
         a list of answers. Will be ["I don't understand"] if it finds no matches and
         ["No answers"] if it finds a match but no answers
     """
-    # title = src[0]
-    # result = []
-    # if match(pa_list, src) == None:
-    #      result.append("I don't understand")
-    # elif match(pa_list,src) == []:
-    #      result.append("No answers")
-    # if match(pa_list, src) == title:
-    #     result.append(director_by_title(title))
 
     for pattern, action in pa_list:
         print(pattern, src, action)
@@ -286,9 +289,10 @@ def search_pa_list(src: List[str]) -> List[str]:
         if mat != None:
             #print("found")
             result = action(mat)
-            return result
-        if mat not in src:
-            return ["No answers"]
+            if result:
+                return result
+            else:
+                return ["No answers"]
     return ["I don't understand"]
 
 
@@ -334,7 +338,7 @@ if __name__ == "__main__":
 
     assert isinstance(title_after_year(["1990"]), list), "title_after_year not returning a list"
     assert sorted(title_after_year(["1990"])) == sorted(
-        ["boyz n the hood", "dead again", "the crying game", "flirting", "malcolm x"]
+        ["boyz n the hood", "dead again", "the crying game", "flirting", "malcolm x", "fight club"]
     ), "failed title_after_year test"
 
     assert isinstance(director_by_title(["jaws"]), list), "director_by_title not returning a list"
@@ -379,5 +383,10 @@ if __name__ == "__main__":
 
     assert sorted(search_pa_list(["what", "movies", "were", "made", "in", "2020"])
     ) == sorted(["No answers"]), "failed search_pa_list test 3"
+
+    assert isinstance(movie_with_number_of_actors([4]), list), "movie_with_number_of_actors not returning a list"
+    assert sorted(movie_with_number_of_actors([4])) == sorted(
+        ["amarcord", "after the rehearsal", "the dresser", "fight club"]
+    ), "failed movie_with_number_of_actors"
 
     print("All tests passed!")

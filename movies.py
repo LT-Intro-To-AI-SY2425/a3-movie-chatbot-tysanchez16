@@ -435,4 +435,15 @@ movie_db: List[Tuple[str, str, int, List[str]]] = [
             "spike lee",
         ],
     ),
+    (
+        "fight club",
+        "david fincher",
+        1999,
+        [
+            "edward norton",
+            "brad pitt",
+            "jared leto",
+            "meat loaf",
+        ],
+    ),
 ]
